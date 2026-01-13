@@ -3,343 +3,134 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ORION CORE HQ</title>
-    <meta name="theme-color" content="#000000">
-    <meta name="description" content="Orion Dev Core HQ Mobile Operating System v2.0">
-    <link rel="manifest" href="manifest.json">
+    <title>Orion HQ</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <!-- React & ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    
+    <!-- Babel for In-Browser JSX Parsing -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
     <style>
-        /* Cyberpunk/Terminal Theme Overrides */
-        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Rajdhani:wght@500;600;700&display=swap');
-
-        :root {
-            --neon-cyan: #00f3ff;
-            --neon-green: #0aff0a;
-            --dark-bg: #050505;
-            --panel-bg: #111111;
-            --border-color: #333;
+        body { 
+            background: #020617; 
+            color: white; 
+            margin: 0; 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+            -webkit-tap-highlight-color: transparent;
         }
-
-        body {
-            font-family: 'Rajdhani', sans-serif;
-            background-color: var(--dark-bg);
-            color: #e0e0e0;
-            overflow-x: hidden;
-        }
-
-        .font-mono {
-            font-family: 'JetBrains Mono', monospace;
-        }
-
-        .neon-border {
-            box-shadow: 0 0 5px rgba(0, 243, 255, 0.2);
-            border: 1px solid rgba(0, 243, 255, 0.3);
-        }
-
-        .neon-text {
-            text-shadow: 0 0 8px rgba(0, 243, 255, 0.5);
-        }
-
-        /* Scanline effect */
-        .scanlines {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                to bottom,
-                rgba(255, 255, 255, 0),
-                rgba(255, 255, 255, 0) 50%,
-                rgba(0, 0, 0, 0.1) 50%,
-                rgba(0, 0, 0, 0.1)
-            );
-            background-size: 100% 4px;
-            pointer-events: none;
-            z-index: 50;
-            opacity: 0.3;
-        }
-
-        /* Custom Scrollbar */
+        /* Custom scrollbar for mobile */
         ::-webkit-scrollbar {
-            width: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: var(--dark-bg);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: var(--neon-cyan);
-            border-radius: 3px;
-        }
-
-        /* Animations */
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
-        }
-        .cursor-blink {
-            animation: blink 1s step-end infinite;
+            display: none;
         }
     </style>
 </head>
-<body class="antialiased min-h-screen flex flex-col">
+<body>
+    <div id="root"></div>
 
-    <div class="scanlines"></div>
+    <script type="text/babel">
+        const { useState, useEffect } = React;
 
-    <!-- Mobile Header -->
-    <header class="sticky top-0 z-40 bg-black/90 backdrop-blur-md border-b border-gray-800 p-4 flex justify-between items-center neon-border border-x-0 border-t-0">
-        <div class="flex items-center gap-3">
-            <div class="w-2 h-8 bg-cyan-400 shadow-[0_0_10px_#00f3ff]"></div>
-            <div>
-                <h1 class="text-xl font-bold tracking-widest text-white neon-text">ORION<span class="text-cyan-400">CORE</span></h1>
-                <div class="text-[10px] text-gray-400 font-mono tracking-wider">SYSTEM v2.0 MOBILE</div>
-            </div>
-        </div>
-        <button id="menu-btn" class="p-2 text-cyan-400 hover:text-white transition-colors" onclick="toggleSidebar()">
-            <i class="ph ph-list text-3xl"></i>
-        </button>
-    </header>
+        const App = () => {
+          const [userName] = useState("Graham");
 
-    <!-- Sidebar / Drawer -->
-    <div id="sidebar-overlay" class="fixed inset-0 bg-black/80 z-40 hidden transition-opacity opacity-0" onclick="toggleSidebar()"></div>
-    <aside id="sidebar" class="fixed inset-y-0 right-0 w-72 bg-[#0a0a0a] border-l border-gray-800 transform translate-x-full transition-transform duration-300 z-50 flex flex-col">
-        <div class="p-6 border-b border-gray-800 flex justify-between items-center">
-            <h2 class="text-lg font-bold text-cyan-400 tracking-wider">COMMAND_MENU</h2>
-            <button onclick="toggleSidebar()" class="text-gray-400 hover:text-red-400">
-                <i class="ph ph-x text-2xl"></i>
+          const launchMusic = () => {
+            window.location.href = "https://music.youtube.com/watch?v=lTRiuFIWV54&list=RDAMVMlTRiuFIWV54";
+          };
+
+          const launchArchitect = () => {
+            // Points to your existing Architect PWA
+            window.location.href = "https://oriondevcore.github.io/orion-architect/";
+          };
+
+          const Card = ({ title, desc, icon, onClick, color = "blue" }) => (
+            <button 
+                onClick={onClick} 
+                className="w-full p-5 bg-slate-900/50 border border-slate-800 rounded-3xl text-left hover:border-blue-500 transition-all active:scale-95 mb-4 shadow-xl"
+            >
+                <div className="flex justify-between items-start mb-2">
+                    <div className={`p-3 bg-${color}-600/20 rounded-2xl text-${color}-500 text-2xl`}>{icon}</div>
+                    <div className="text-[10px] font-black uppercase text-slate-500 tracking-widest">Active</div>
+                </div>
+                <h3 className="font-bold text-lg mb-1">{title}</h3>
+                <p className="text-xs text-slate-500">{desc}</p>
             </button>
-        </div>
-        
-        <nav class="flex-1 overflow-y-auto p-4 space-y-6">
-            <!-- Main Command -->
-            <div>
-                <div class="text-xs font-mono text-gray-500 mb-2 uppercase tracking-widest">Main Command</div>
-                <ul class="space-y-2">
-                    <li><button onclick="switchTab('dashboard')" class="w-full text-left p-3 hover:bg-cyan-900/20 text-gray-300 hover:text-cyan-400 border border-transparent hover:border-cyan-900/50 rounded flex items-center gap-3 transition-all"><i class="ph ph-gauge"></i> Dashboard</button></li>
-                    <li><button onclick="switchTab('tasks')" class="w-full text-left p-3 hover:bg-cyan-900/20 text-gray-300 hover:text-cyan-400 border border-transparent hover:border-cyan-900/50 rounded flex items-center gap-3 transition-all"><i class="ph ph-check-square"></i> Daily Tasks</button></li>
-                    <li><button class="w-full text-left p-3 hover:bg-purple-900/20 text-purple-300 hover:text-purple-400 border border-transparent hover:border-purple-900/50 rounded flex items-center gap-3 transition-all"><i class="ph ph-sparkle"></i> Orion AI (Gemini)</button></li>
-                </ul>
-            </div>
+          );
 
-            <!-- Communications -->
-            <div>
-                <div class="text-xs font-mono text-gray-500 mb-2 uppercase tracking-widest">Communications</div>
-                <ul class="space-y-2">
-                    <li><button class="w-full text-left p-3 hover:bg-green-900/20 text-gray-300 hover:text-green-400 border border-transparent hover:border-green-900/50 rounded flex items-center gap-3 transition-all"><i class="ph ph-whatsapp-logo"></i> WhatsApp Uplink</button></li>
-                    <li><button class="w-full text-left p-3 hover:bg-red-900/20 text-gray-300 hover:text-red-400 border border-transparent hover:border-red-900/50 rounded flex items-center gap-3 transition-all"><i class="ph ph-envelope"></i> Gmail AI Drafts</button></li>
-                </ul>
-            </div>
-
-            <!-- System -->
-            <div>
-                <div class="text-xs font-mono text-gray-500 mb-2 uppercase tracking-widest">System</div>
-                <ul class="space-y-2">
-                    <li><button onclick="switchTab('uplink')" class="w-full text-left p-3 hover:bg-yellow-900/20 text-gray-300 hover:text-yellow-400 border border-transparent hover:border-yellow-900/50 rounded flex items-center gap-3 transition-all"><i class="ph ph-key"></i> HQ Secret Keys</button></li>
-                </ul>
-            </div>
-        </nav>
-
-        <div class="p-4 border-t border-gray-800">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-full bg-cyan-900/30 flex items-center justify-center border border-cyan-500/30 text-cyan-400">
-                    <span class="font-bold">GS</span>
-                </div>
+          return (
+            <div className="max-w-md mx-auto p-6 min-h-screen">
+              <header className="flex justify-between items-center mb-10 mt-4">
                 <div>
-                    <div class="text-sm font-bold text-white">Graham Schubach</div>
-                    <div class="text-xs text-cyan-400">FOUNDER / OWNER</div>
+                    <h1 className="text-2xl font-black italic">ORION <span className="text-blue-500">HQ</span></h1>
+                    <p className="text-xs text-slate-500 font-bold uppercase tracking-widest">Welcome back, {userName}</p>
                 </div>
-            </div>
-        </div>
-    </aside>
+                <div className="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center border border-slate-700 font-bold text-blue-500 shadow-lg">
+                    {userName[0]}
+                </div>
+              </header>
 
-    <!-- Main Content Area -->
-    <main class="flex-1 p-4 pb-20 max-w-3xl mx-auto w-full">
-        
-        <!-- Status Banner -->
-        <div class="mb-6 p-4 rounded bg-gradient-to-r from-cyan-950/40 to-transparent border-l-2 border-cyan-400">
-            <div class="flex justify-between items-start">
+              {/* Music Widget */}
+              <div className="bg-gradient-to-r from-blue-600 to-indigo-700 p-6 rounded-[2.5rem] mb-8 shadow-2xl shadow-blue-500/20 flex justify-between items-center">
                 <div>
-                    <div class="text-xs text-cyan-400 font-mono mb-1">SYSTEM_ROOT / DASHBOARD</div>
-                    <h2 class="text-xl text-white font-bold">Welcome, Graham.</h2>
+                    <h2 className="font-black text-xl italic uppercase">Deep Focus</h2>
+                    <p className="text-xs text-blue-100 font-bold">YouTube Music Mix</p>
                 </div>
-                <div class="flex items-center gap-1.5 px-2 py-1 bg-green-900/30 border border-green-500/30 rounded text-xs text-green-400 font-mono">
-                    <div class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>
-                    ONLINE
-                </div>
+                <button 
+                    onClick={launchMusic} 
+                    className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-blue-600 shadow-lg active:scale-90 transition-transform"
+                >
+                    ▶️
+                </button>
+              </div>
+
+              <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 mb-4 ml-2">Core Systems</h2>
+              
+              <Card 
+                title="Orion Architect" 
+                desc="Access Mintaka & The Board of Directors." 
+                icon="🧠" 
+                onClick={launchArchitect} 
+              />
+
+              <Card 
+                title="App Factory" 
+                desc="Deploy Hotel, Legal, and POS Suites." 
+                icon="🏭" 
+                color="purple"
+                onClick={() => alert("Launching Factory...")} 
+              />
+
+              <div className="grid grid-cols-3 gap-3 mt-8">
+                {[
+                    { label: 'WhatsApp', icon: '💬', link: 'https://wa.me/' },
+                    { label: 'GitHub', icon: '🐙', link: 'https://github.com/' },
+                    { label: 'Gmail', icon: '✉️', link: 'mailto:' }
+                ].map(app => (
+                    <a 
+                        key={app.label} 
+                        href={app.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="aspect-square bg-slate-900 border border-slate-800 rounded-2xl flex flex-col items-center justify-center gap-2 active:scale-90 transition-transform"
+                    >
+                        <div className="text-xl opacity-80">{app.icon}</div>
+                        <span className="text-[8px] font-bold uppercase tracking-widest text-slate-500">{app.label}</span>
+                    </a>
+                ))}
+              </div>
+
+              <footer className="mt-20 mb-8 text-center">
+                <p className="text-[8px] text-slate-600 font-bold uppercase tracking-[0.5em]">Orion Dev Core • South Africa</p>
+              </footer>
             </div>
-        </div>
+          );
+        };
 
-        <!-- Tab: Dashboard -->
-        <div id="tab-dashboard" class="space-y-4 tab-content animate-fade-in">
-            <!-- Quick Stats -->
-            <div class="grid grid-cols-2 gap-3">
-                <div class="bg-[#111] p-4 rounded border border-gray-800 hover:border-cyan-500/50 transition-colors">
-                    <div class="text-gray-500 text-xs font-mono mb-2 uppercase">System Status</div>
-                    <div class="text-green-400 text-lg font-bold flex items-center gap-2">
-                        <i class="ph ph-check-circle"></i> Active
-                    </div>
-                </div>
-                <div class="bg-[#111] p-4 rounded border border-gray-800 hover:border-cyan-500/50 transition-colors">
-                    <div class="text-gray-500 text-xs font-mono mb-2 uppercase">Next Meeting</div>
-                    <div class="text-gray-300 text-lg font-bold">None</div>
-                </div>
-            </div>
-
-            <!-- Terminal Output -->
-            <div class="bg-black p-4 rounded border border-gray-800 font-mono text-sm overflow-hidden relative">
-                <div class="absolute top-2 right-2 flex gap-1">
-                    <div class="w-2 h-2 rounded-full bg-red-500/50"></div>
-                    <div class="w-2 h-2 rounded-full bg-yellow-500/50"></div>
-                    <div class="w-2 h-2 rounded-full bg-green-500/50"></div>
-                </div>
-                <div class="text-gray-500 mb-2">root@orion-mobile:~$ ./init_sequence.sh</div>
-                <div class="space-y-1" id="terminal-output">
-                    <div class="text-green-500">[OK] Core Modules Loaded...</div>
-                    <div class="text-green-500">[OK] Uplink Secure...</div>
-                    <div class="text-cyan-400">[INFO] Gemini 2.0 Standby...</div>
-                    <div class="flex items-center gap-1 text-white">
-                        <span>> Waiting for input</span>
-                        <span class="w-2 h-4 bg-cyan-400 cursor-blink"></span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Tab: Uplink Config -->
-        <div id="tab-uplink" class="space-y-6 tab-content hidden">
-            <div class="bg-[#111] p-1 rounded border border-gray-800">
-                <div class="p-3 border-b border-gray-800 bg-black/50">
-                    <h3 class="text-cyan-400 font-bold flex items-center gap-2">
-                        <i class="ph ph-lock-key"></i> UPLINK CONFIGURATION
-                    </h3>
-                    <p class="text-xs text-gray-500 mt-1">Keys stored locally in browser storage.</p>
-                </div>
-                <div class="p-4 space-y-4">
-                    <div class="space-y-1">
-                        <label class="text-xs font-mono text-gray-400">GEMINI_API_KEY</label>
-                        <input type="password" id="key-gemini" class="w-full bg-black border border-gray-700 rounded p-2 text-white text-sm focus:border-cyan-400 focus:outline-none focus:ring-1 focus:ring-cyan-400 transition-all" placeholder="Enter API Key">
-                    </div>
-                    <div class="space-y-1">
-                        <label class="text-xs font-mono text-gray-400">GITHUB_PAT (TOKEN)</label>
-                        <input type="password" id="key-github" class="w-full bg-black border border-gray-700 rounded p-2 text-white text-sm focus:border-cyan-400 focus:outline-none focus:ring-1 focus:ring-cyan-400 transition-all" placeholder="ghp_...">
-                    </div>
-                    <div class="space-y-1">
-                        <label class="text-xs font-mono text-gray-400">YOCO_SECRET_KEY</label>
-                        <input type="password" id="key-yoco" class="w-full bg-black border border-gray-700 rounded p-2 text-white text-sm focus:border-cyan-400 focus:outline-none focus:ring-1 focus:ring-cyan-400 transition-all" placeholder="sk_...">
-                    </div>
-                    
-                    <button onclick="saveCredentials()" class="w-full mt-4 bg-cyan-900/30 hover:bg-cyan-900/50 text-cyan-400 border border-cyan-500/50 py-3 rounded font-bold tracking-wider transition-all flex justify-center items-center gap-2 group">
-                        <i class="ph ph-floppy-disk group-hover:animate-bounce"></i> SAVE CREDENTIALS
-                    </button>
-                    <div id="save-msg" class="text-center text-xs text-green-400 h-4"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Tab: Tasks (Placeholder) -->
-        <div id="tab-tasks" class="space-y-4 tab-content hidden">
-             <div class="bg-[#111] p-8 rounded border border-gray-800 text-center flex flex-col items-center justify-center min-h-[300px]">
-                <i class="ph ph-list-checks text-4xl text-gray-600 mb-4"></i>
-                <h3 class="text-lg font-bold text-gray-300">Daily Objectives</h3>
-                <p class="text-gray-500 text-sm mt-2">No pending tasks retrieved from core.</p>
-                <button class="mt-4 px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded text-sm text-white transition-colors">Sync Tasks</button>
-             </div>
-        </div>
-
-    </main>
-
-    <!-- Bottom Actions (Mobile Quick Access) -->
-    <div class="fixed bottom-0 left-0 w-full bg-black/90 backdrop-blur border-t border-gray-800 p-3 grid grid-cols-4 gap-2 z-30 pb-safe">
-        <button onclick="switchTab('dashboard')" class="flex flex-col items-center gap-1 text-cyan-400">
-            <i class="ph ph-house text-xl"></i>
-            <span class="text-[9px] uppercase tracking-widest">Home</span>
-        </button>
-        <button onclick="switchTab('tasks')" class="flex flex-col items-center gap-1 text-gray-500 hover:text-cyan-400">
-            <i class="ph ph-check-square text-xl"></i>
-            <span class="text-[9px] uppercase tracking-widest">Tasks</span>
-        </button>
-        <button onclick="alert('AI Module Loading...')" class="flex flex-col items-center gap-1 text-gray-500 hover:text-purple-400">
-            <i class="ph ph-sparkle text-xl"></i>
-            <span class="text-[9px] uppercase tracking-widest">AI</span>
-        </button>
-        <button onclick="toggleSidebar()" class="flex flex-col items-center gap-1 text-gray-500 hover:text-white">
-            <i class="ph ph-dots-three-circle text-xl"></i>
-            <span class="text-[9px] uppercase tracking-widest">More</span>
-        </button>
-    </div>
-
-    <script>
-        // --- Service Worker Registration ---
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js')
-                    .then(reg => console.log('SW Registered'))
-                    .catch(err => console.log('SW Fail:', err));
-            });
-        }
-
-        // --- UI Logic ---
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('sidebar-overlay');
-            
-            if (sidebar.classList.contains('translate-x-full')) {
-                // Open
-                sidebar.classList.remove('translate-x-full');
-                overlay.classList.remove('hidden');
-                setTimeout(() => overlay.classList.remove('opacity-0'), 10);
-            } else {
-                // Close
-                sidebar.classList.add('translate-x-full');
-                overlay.classList.add('opacity-0');
-                setTimeout(() => overlay.classList.add('hidden'), 300);
-            }
-        }
-
-        function switchTab(tabId) {
-            // Hide all tabs
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-            
-            // Show selected tab
-            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
-            
-            // Close sidebar if open
-            const sidebar = document.getElementById('sidebar');
-            if (!sidebar.classList.contains('translate-x-full')) {
-                toggleSidebar();
-            }
-
-            // Scroll to top
-            window.scrollTo(0,0);
-        }
-
-        // --- Data Logic ---
-        function loadCredentials() {
-            const keys = ['key-gemini', 'key-github', 'key-yoco'];
-            keys.forEach(id => {
-                const stored = localStorage.getItem(id);
-                if (stored) document.getElementById(id).value = stored;
-            });
-        }
-
-        function saveCredentials() {
-            const keys = ['key-gemini', 'key-github', 'key-yoco'];
-            keys.forEach(id => {
-                const val = document.getElementById(id).value;
-                localStorage.setItem(id, val);
-            });
-
-            // Feedback Animation
-            const msg = document.getElementById('save-msg');
-            msg.innerText = "CREDENTIALS ENCRYPTED & SAVED";
-            setTimeout(() => msg.innerText = "", 3000);
-        }
-
-        // Init
-        window.addEventListener('DOMContentLoaded', () => {
-            loadCredentials();
-        });
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
     </script>
 </body>
 </html>
